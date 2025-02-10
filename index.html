@@ -135,9 +135,12 @@
             }
 
             start.setDate(start.getDate() + daysToAdd);
-            let futureDate = start.toISOString().split('T')[0]; // Formats as YYYY-MM-DD
 
-            document.getElementById("futureDateResult").innerText = `Future Date: ${futureDate}`;
+            // Format the date as "Thursday 20 February 2025"
+            let options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            let formattedDate = start.toLocaleDateString('en-GB', options); 
+
+            document.getElementById("futureDateResult").innerText = `Future Date: ${formattedDate}`;
         }
 
         function addGST() {
