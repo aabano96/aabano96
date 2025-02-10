@@ -62,10 +62,12 @@
         <h1>Contact Information</h1>
         <p>You can reach me at <a href="mailto:mail@alexisabano.com">mail@alexisabano.com</a> or at +63 976 003 0238.</p>
         
-        <h2>📅 How Many Days Between?</h2>
-        <input type="date" id="startDate"> to <input type="date" id="endDate">
-        <button onclick="calculateDays()">Calculate</button>
-        <p class="result" id="daysResult"></p>
+        <h2>📅 Date Calculator</h2>
+        <p>Select a date and enter the number of days to add:</p>
+        <input type="date" id="startDate"> 
+        <input type="number" id="daysToAdd" placeholder="Enter number of days">
+        <button onclick="calculateFutureDate()">Calculate Future Date</button>
+        <p class="result" id="futureDateResult"></p>
 
         <h2>💰 GST Calculator (Australian Real Estate)</h2>
         <input type="number" id="gstInput" placeholder="Enter Price in AUD">
@@ -123,19 +125,19 @@
             document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         }
 
-        function calculateDays() {
+        function calculateFutureDate() {
             let start = new Date(document.getElementById("startDate").value);
-            let end = new Date(document.getElementById("endDate").value);
+            let daysToAdd = parseInt(document.getElementById("daysToAdd").value, 10);
 
-            if (isNaN(start) || isNaN(end)) {
-                document.getElementById("daysResult").innerText = "Please select both dates.";
+            if (isNaN(start) || isNaN(daysToAdd)) {
+                document.getElementById("futureDateResult").innerText = "Please select a date and enter a valid number.";
                 return;
             }
 
-            let difference = Math.abs(end - start);
-            let daysBetween = difference / (1000 * 60 * 60 * 24);
+            start.setDate(start.getDate() + daysToAdd);
+            let futureDate = start.toISOString().split('T')[0]; // Formats as YYYY-MM-DD
 
-            document.getElementById("daysResult").innerText = `Days Between: ${daysBetween} days`;
+            document.getElementById("futureDateResult").innerText = `Future Date: ${futureDate}`;
         }
 
         function addGST() {
