@@ -76,6 +76,12 @@
         <input type="text" id="percentValue" placeholder="Enter percentage (e.g., +10%, -15%, or custom value)">
         <button onclick="calculatePercentage()">Calculate</button>
         <p class="result" id="percentResult"></p>
+
+        <h2>🧠 General Knowledge Quiz</h2>
+        <p id="quizQuestion"></p>
+        <div id="quizOptions"></div>
+        <p class="result" id="quizResult"></p>
+        <button onclick="nextQuestion()">Next Question</button>
     </div>
 
     <div class="container" style="margin-top: 20px;">
@@ -113,176 +119,34 @@
             document.getElementById("futureDateResult").innerText = `Future Date: ${formattedDate}`;
         }
 
-        function calculatePercentage() {
-            let number = parseFloat(document.getElementById("percentOf").value);
-            let percentInput = document.getElementById("percentValue").value.trim();
-            let sign = percentInput.charAt(0);
-            let percent = parseFloat(percentInput.replace(/[^0-9.]/g, ''));
+        function nextQuestion() {
+            const quizData = [
+                { question: "What is the capital of France?", options: ["Berlin", "Madrid", "Paris", "Rome"], answer: "Paris" },
+                { question: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "Mark Twain", "Ernest Hemingway", "F. Scott Fitzgerald"], answer: "Harper Lee" },
+                { question: "What is the largest planet in our solar system?", options: ["Earth", "Mars", "Jupiter", "Saturn"], answer: "Jupiter" }
+            ];
             
-            if (isNaN(number) || isNaN(percent)) {
-                document.getElementById("percentResult").innerText = "Please enter valid numbers.";
-                return;
-            }
-
-            let result;
-            if (sign === '+') {
-                result = number + (number * percent / 100);
-                document.getElementById("percentResult").innerText = `${number} increased by ${percent}% is ${result}`;
-            } else if (sign === '-') {
-                result = number - (number * percent / 100);
-                document.getElementById("percentResult").innerText = `${number} decreased by ${percent}% is ${result}`;
-            } else {
-                result = number * (percent / 100);
-                document.getElementById("percentResult").innerText = `${percent}% of ${number} is ${result}`;
-            }
-        }
-
-        function addGST() {
-            let amount = parseFloat(document.getElementById("gstInput").value);
-            document.getElementById("gstResult").innerText = `Price with GST: AUD ${(amount * 1.1).toFixed(2)}`;
-        }
-
-        function removeGST() {
-            let amount = parseFloat(document.getElementById("gstInput").value);
-            document.getElementById("gstResult").innerText = `Price without GST: AUD ${(amount / 1.1).toFixed(2)}`;
-        }
-
-        window.onload = getBibleVerse;
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Alexis' Fun & Useful Website</title>
-    <meta charset="UTF-8">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        h1, h2 {
-            color: #333;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
-        }
-        button {
-            background-color: #008CBA;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            margin: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #005f73;
-        }
-        input {
-            padding: 10px;
-            font-size: 16px;
-            margin: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 80%;
-        }
-        .result {
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        .bible-verse {
-            font-size: 16px;
-            font-style: italic;
-            margin-bottom: 20px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <p class="bible-verse" id="bibleVerse">Loading verse...</p>
-        
-        <h2>📅 Date Calculator</h2>
-        <input type="date" id="startDate"> 
-        <input type="number" id="daysToAdd" placeholder="Enter number of days">
-        <button onclick="calculateFutureDate()">Calculate Future Date</button>
-        <p class="result" id="futureDateResult"></p>
-
-        <h2>💰 GST Calculator (Australian Real Estate)</h2>
-        <input type="number" id="gstInput" placeholder="Enter Price in AUD">
-        <button onclick="addGST()">Add 10% GST</button>
-        <button onclick="removeGST()">Remove 10% GST</button>
-        <p class="result" id="gstResult"></p>
-
-        <h2>📊 Percentage Calculator</h2>
-        <input type="number" id="percentOf" placeholder="Enter number">
-        <input type="text" id="percentValue" placeholder="Enter percentage (e.g., +10%, -15%, or custom value)">
-        <button onclick="calculatePercentage()">Calculate</button>
-        <p class="result" id="percentResult"></p>
-    </div>
-
-    <div class="container" style="margin-top: 20px;">
-        <h2>Need any help?</h2>
-        <p>Reach me at <a href="mailto:mail@alexisabano.com">mail@alexisabano.com</a> or +63 976 003 0238.</p>
-    </div>
-
-    <script>
-        function getBibleVerse() {
-            fetch('https://beta.ourmanna.com/api/v1/get/?format=json')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("bibleVerse").innerText = data.verse.details.text + " - " + data.verse.details.reference;
-                })
-                .catch(() => {
-                    document.getElementById("bibleVerse").innerText = "Failed to load verse. Please refresh.";
-                });
-        }
-
-        function calculatePercentage() {
-            let number = parseFloat(document.getElementById("percentOf").value);
-            let percentInput = document.getElementById("percentValue").value.trim();
-            let sign = percentInput.charAt(0);
-            let percent = parseFloat(percentInput.replace(/[^0-9.]/g, ''));
+            let quizIndex = Math.floor(Math.random() * quizData.length);
+            let quizItem = quizData[quizIndex];
             
-            if (isNaN(number) || isNaN(percent)) {
-                document.getElementById("percentResult").innerText = "Please enter valid numbers.";
-                return;
-            }
-
-            let result;
-            if (sign === '+') {
-                result = number + (number * percent / 100);
-                document.getElementById("percentResult").innerText = `${number} increased by ${percent}% is ${result}`;
-            } else if (sign === '-') {
-                result = number - (number * percent / 100);
-                document.getElementById("percentResult").innerText = `${number} decreased by ${percent}% is ${result}`;
-            } else {
-                result = number * (percent / 100);
-                document.getElementById("percentResult").innerText = `${percent}% of ${number} is ${result}`;
-            }
+            document.getElementById("quizQuestion").innerText = quizItem.question;
+            let optionsDiv = document.getElementById("quizOptions");
+            optionsDiv.innerHTML = "";
+            
+            quizItem.options.forEach(option => {
+                let button = document.createElement("button");
+                button.innerText = option;
+                button.onclick = function() {
+                    document.getElementById("quizResult").innerText = option === quizItem.answer ? "Correct!" : `Wrong! The correct answer is ${quizItem.answer}.`;
+                };
+                optionsDiv.appendChild(button);
+            });
         }
 
-        function addGST() {
-            let amount = parseFloat(document.getElementById("gstInput").value);
-            document.getElementById("gstResult").innerText = `Price with GST: AUD ${(amount * 1.1).toFixed(2)}`;
-        }
-
-        function removeGST() {
-            let amount = parseFloat(document.getElementById("gstInput").value);
-            document.getElementById("gstResult").innerText = `Price without GST: AUD ${(amount / 1.1).toFixed(2)}`;
-        }
-
-        window.onload = getBibleVerse;
+        window.onload = function() {
+            getBibleVerse();
+            nextQuestion();
+        };
     </script>
 </body>
 </html>
