@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Alexis' Fun & Useful Website</title>
+    <title>Alexis' Super Good Website</title>
     <meta charset="UTF-8">
     <style>
         body {
@@ -104,8 +104,30 @@
             document.getElementById("percentResult").innerText = `Result: ${percentage}% of ${base} is ${(base * (percentage / 100)).toFixed(2)}`;
         }
     </script>
+<script>
+        function updateTime() {
+            setInterval(() => {
+                let brisbaneTime = new Date().toLocaleString('en-US', { timeZone: 'Australia/Brisbane', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+                document.getElementById("brisbaneTime").innerText = `🕒 Brisbane Time: ${brisbaneTime}`;
+            }, 1000);
+        }
+        function getWeather() {
+            fetch('https://api.open-meteo.com/v1/forecast?latitude=15.97&longitude=120.57&current=temperature_2m&timezone=Asia/Manila')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("weather").innerText = `🌤 Santa Maria Weather: ${data.current.temperature_2m}°C`;
+                })
+                .catch(() => {
+                    document.getElementById("weather").innerText = "🌤 Santa Maria Weather: N/A";
+                });
+        }
+    </script>
 </head>
-<body onload="getBibleVerse()">
+<body onload="getBibleVerse(); updateTime(); getWeather();">
+    <div style="display: flex; justify-content: space-between; padding: 10px; background: #f4f4f4;">
+        <div id="brisbaneTime" style="font-size: 16px; font-weight: bold;">🕒 Brisbane Time: Loading...</div>
+        <div id="weather" style="font-size: 16px; font-weight: bold;">🌤 Santa Maria Weather: Loading...</div>
+    </div>
     <div class="container">
         <p class="bible-verse" id="bibleVerse">Loading verse...</p>
     </div>
@@ -138,5 +160,18 @@
         <h2>Need any help?</h2>
         <p>Reach me at <a href="mailto:mail@alexisabano.com">mail@alexisabano.com</a> or +63 976 003 0238.</p>
     </div>
+    <div class="container" style="margin-top: 20px;">
+        <h2>👀 Visitor Counter</h2>
+        <p>This site has been visited <span id="visitorCount">loading...</span> times.</p>
+    </div>
+    <script>
+        function updateVisitorCount() {
+            let count = localStorage.getItem('visitorCount') || 0;
+            count++;
+            localStorage.setItem('visitorCount', count);
+            document.getElementById("visitorCount").innerText = count;
+        }
+        updateVisitorCount();
+    </script>
 </body>
 </html>
